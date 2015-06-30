@@ -1,0 +1,182 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}ConnectMe{% endblock %}</title>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    
+    <link rel="stylesheet" href="{% static 'css/jquery.auto-complete.css'%}">
+    <link href="{% static 'css/bootstrap.min.css" rel="stylesheet'%}">
+    <link href="{% static 'css/ConnectMe.css'%}" rel="stylesheet">
+    <link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js'%}"></script>
+    <script src="{% static 'js/ConnectMe.js'%}"></script>
+    
+    <script type="text/javascript"src="{% static 'js/jquery.cookie.js'%}" ></script>
+    
+   
+    <script src="{% static 'js/jquery.auto-complete.js'%}"></script>
+<script type="text/javascript" language="Javascript" src="{% static 'js/jquery-ui.min.js'%}"></script>
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    
+    {% block head %}
+    {% endblock head %}
+  </head>
+  <body>
+    {% block body %}
+     <header>
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="{% url 'home' %}">ConnectMe</a>
+            </div>
+            <div class="collapse navbar-collapse" id="menu">
+              <ul class="nav navbar-nav">
+                
+                <li><a href="{% url 'feeds' %}">{% trans 'Feed' %}</a></li>
+              </ul>
+                <form class="navbar-form navbar-left" role="search" action="#">
+                  <div class="input-group" style="width:210px">
+                    <input type="text" class="form-control" name="find_friend" placeholder="Find friends" id="find_friend" >
+                    <span class="input-group-btn">
+                      <input  value="Invite" type='button'id="invitation"class="btn btn-default"/>
+                    </span>
+                  </div>
+                </form>
+              <ul class="nav navbar-nav navbar-right">
+                <li>
+                  <a href="{% url 'profile' user.username %}">{{ user.get_full_name }}</a>
+                </li>
+                <li>
+        <img src="{{ user.userprofile.get_picture  }}" style="width: 50px; border-radius: 1px;">
+      
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'settings' %}">{% trans 'Account Settings' %}</a></li>
+                    <li>
+                      <input  type="button" class="list-group-item" id="Friends" type="button" value="           Friends           "/>
+                    </li>
+                    
+                    <li>
+                      <button type="button"  class="list-group-item{% if active == 'password' %} active{% endif %}" data-toggle="modal" data-target="#myModal">Change Password</button>
+                    </li>
+                    <li class="divider"></li>
+                    <li><a href="{% url 'logout' %}">{% trans 'Log out' %}</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <main>
+<div id="dialog" title="Friend list">
+</div>
+<div id="message1" title="Message">
+</div>
+   
+
+
+       <!-- Trigger the modal with a button -->
+  <div class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Friend List</h4>
+          <br/>
+          <div class="alert alert-info" role="alert">
+          <div id='message'></div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">ConnectMe</h4>
+          <br/>
+          <div class="alert alert-info" role="alert">
+          <div id='message'></div>
+          </div>
+
+            <form method="POST" action="#" class='form-horizontal'>
+              {% csrf_token %}
+              <div class="form-group">
+              <label class="control-label col-sm-2" for="pwd">Current Password</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" name="cur_pwd" id="cur_pwd" size="25" required placeholder="Enter Current Password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pwd">New Password</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" name="new_pwd" id="new_pwd" size="25" required placeholder="Enter New password">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="pwd">Confirm Password</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" name="confirm_pwd" id="confirm_pwd" size="25" required placeholder="Enter Confirm password">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <input type="button" class="btn btn-default" name="Change Password" id="submit" onclick="loadXMLDoc()" value='Submit'/>
+                  <input type="reset" name="reset" id="reset"class="btn btn-default"  value="Reset"/>
+             
+              </div>
+            </div>
+             </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+        <div class="container">
+          {% block main %}
+          {% endblock main %}
+        </div>
+      </main>
+    {% endblock body %}
+  </body>
+</html>

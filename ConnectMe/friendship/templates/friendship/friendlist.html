@@ -1,0 +1,14 @@
+
+{% for friend in friends %}
+<div>
+	<h4><a href="{% url 'profile' friend.username %}">
+      <img src="{{ friend.userprofile.get_picture }}" alt="Smiley face" height="42" width="42">
+    </a>
+    
+      <a href="{% url 'profile' friend.username %}">
+        {{ friend.userprofile.get_screen_name }}
+      </a>
+      <small>{{friend.email}}</small>
+    </h4>
+</div>
+{%endfor%}

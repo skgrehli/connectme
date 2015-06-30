@@ -1,0 +1,44 @@
+
+{% load staticfiles %}
+
+{% block head_extra %} 
+
+<script src="{% static 'js/bootstrap.js'%}"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+{% endblock head_extra %}
+{% block content %}
+<h1 class="logo"><a href="#">ConnectMe</a></h1>
+<div class="container">
+  {% if validlink %} 
+    <form role="form" action="." method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          {{ error }}
+        {% endfor %}
+      {% endif %}
+      <div class="form-container">
+        <div class="form-header">
+          <h1>Confirm Password Reset</h1>
+        </div>
+        <div class="form-body">
+          {% for field in form %}
+            <label class='control-label col-sm-2' for="{{ field.label }}">{{ field.label_tag }}</label>
+          <div class="col-sm-10">
+          {{ field }}
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <p class="error">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-success btn-large" style="width: 100%">Submit</button>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <p class="error">Invalid password reset link.</p>
+  {% endif %}
+  </div>
+{% endblock content %} 

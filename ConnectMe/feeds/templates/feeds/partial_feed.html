@@ -1,0 +1,33 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<li feed-id="{{ feed.pk }}" csrf="{{ csrf_token }}">
+  <a href="{% url 'profile' feed.user.username %}"><img src="{{ feed.user.userprofile.get_picture }}" class="user"></a>
+  <div class="post">
+    {% if feed.user == user %}
+      <span class="glyphicon glyphicon-remove remove-feed" title="{% trans 'Click to remove this feed' %}"></span>
+    {% endif %}
+    <h3> <a href="{% url 'profile' feed.user.username %}">{{ feed.user.userprofile.get_screen_name }}</a> <small>{{ feed.created_at }}</small>
+    <samll>{{ feed.get_visibility }} </samll>
+
+    </h3>
+    <p>{{ feed.linkfy_post|safe }}</p>
+    <div class="interaction">
+      
+      <a href="#" class="comment">
+        <span class="glyphicon glyphicon-comment"></span> {% trans 'Comment' %}
+        (<span class="comment-count">{{ feed.comments }}</span>)
+      </a>
+    </div>
+    <div class="comments">
+      <form role="form" method="post" action="{{ comment }}" onsubmit="return false">
+        {% csrf_token %}
+        <input type="hidden" name="feed" value="{{ feed.pk }}">
+        <input type="text" class="form-control input-sm" placeholder="{% trans 'Write a comment...' %}" name="post" maxlength="255">
+      </form>
+      <ol class="clearfix">
+        {% comment %} Place holder to load feed comments {% endcomment %}
+      </ol>
+    </div>
+  </div>
+</li>

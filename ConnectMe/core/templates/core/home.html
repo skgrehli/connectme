@@ -1,0 +1,17 @@
+{% extends 'base_app.html' %}
+{% load staticfiles %}
+
+{% block head_extra %}
+  <link href="{% static 'css/home.css' %}" rel="stylesheet" media="screen">
+{% endblock head_extra %}
+
+{% block content %}
+  <div class="clearfix">
+    <div class="last-updates">
+      <h1>Last updates on ConnectMe</h1>
+      <ul>
+        </ul>
+    </div>
+
+  </div>
+{% endblock content %}
